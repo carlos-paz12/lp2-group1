@@ -2,6 +2,7 @@ package br.universidade.biblio;
 
 import java.util.Scanner;
 
+/// @brief Define os diferentes estados possíveis da aplicação.
 enum Estados {
     INDEFINIDO,
     NO_MENU_DE_OPCOES,
@@ -14,13 +15,14 @@ enum Estados {
     ENCERRANDO;
 }
 
+/// @brief Motor da aplicação.
 public class Main {
 
     //=== Atributos.
-    // private Biblioteca biblioteca;
-    private Estados estadoAtual;
-    private Scanner scanner;
-    private int opcaoDoUsuario;
+    // private Biblioteca biblioteca;  //!< Principal interface com o sistema.
+    private Estados estadoAtual;    //!< Estado atual da máquina.
+    private Scanner scanner;        //!< Mecanismo de leitura de estrada.
+    private int opcaoDoUsuario;     //!< Opção escolhida no menu de opções.
 
     //=== Construtor.
     public Main() {
@@ -33,7 +35,7 @@ public class Main {
     }
 
     //=== Métodos core.
-    /// @brief Lida com os inputs do usuário.
+    /// @brief Responsável por receber as entradas do usuário.
     public void processar() {
 
         if (estadoAtual == Estados.NO_MENU_DE_OPCOES) {
@@ -42,11 +44,13 @@ public class Main {
 
     }
 
-    /// @brief Atualiza estado interno do sistema.
+    /// @brief Responsável por tratar as entradas e atualizar estado interno do sistema.
     public void atualizar() {
 
         if (estadoAtual == Estados.INDEFINIDO) {
             estadoAtual = Estados.NO_MENU_DE_OPCOES;
+            return; // <-- Evita que a validação do estado "NO_MENU_DE_OPCOES"
+                    // seja executada antes da renderização da interface.
         }
 
         if (estadoAtual == Estados.NO_MENU_DE_OPCOES) {
@@ -68,7 +72,8 @@ public class Main {
                 /* alguma outra coisa */
             }
 
-            return;
+            return; // <-- Evita que a validação do estado das transições acima
+                    // seja executada antes da renderização da interface.
         }
 
         if (estadoAtual == Estados.EM_ERRO) {
@@ -97,7 +102,7 @@ public class Main {
 
     }
 
-    /// @brief Renderiza interfaces.
+    /// @brief Responsável por desenhar e atualizar os elementos da interface gráfica.
     public void renderizar() {
 
         if (estadoAtual == Estados.NO_MENU_DE_OPCOES) {
