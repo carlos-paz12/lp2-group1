@@ -12,29 +12,32 @@ enum Estados {
     FAZENDO_EMPRESTIMO,
     DEVOLVENDO_LIVRO,
     IMPRIMINDO_RELATORIO,
+    SUCESSO,
     ENCERRANDO;
 }
 
 /// @brief Motor da aplicação.
 public class Main {
 
-    //=== Atributos.
-    // private Biblioteca biblioteca;  //!< Principal interface com o sistema.
+    // === Atributos.
+    // private Biblioteca biblioteca; //!< Principal interface com o sistema.
     private Estados estadoAtual;    //!< Estado atual da máquina.
     private Scanner scanner;        //!< Mecanismo de leitura de estrada.
     private int opcaoDoUsuario;     //!< Opção escolhida no menu de opções.
+    private String entrada;         //!< Linha de entrada do usuário contendo informações da funcionalidade escolhida.
 
-    //=== Construtor.
+    // === Construtor.
     public Main() {
 
         // this.biblioteca = new Biblioteca();
         this.estadoAtual = Estados.INDEFINIDO;
         this.scanner = new Scanner(System.in);
         this.opcaoDoUsuario = 0;
+        this.entrada = "";
 
     }
 
-    //=== Métodos core.
+    // === Métodos core.
     /// @brief Responsável por receber as entradas do usuário.
     public void processar() {
 
@@ -42,9 +45,18 @@ public class Main {
             opcaoDoUsuario = scanner.nextInt();
         }
 
+        if (estadoAtual == Estados.EM_ERRO || estadoAtual == Estados.SUCESSO) {
+            scanner.nextLine();
+        }
+
+        if (estadoAtual != Estados.NO_MENU_DE_OPCOES && estadoAtual != Estados.SUCESSO
+                && estadoAtual != Estados.EM_ERRO) {
+            entrada = scanner.nextLine();
+        }
     }
 
-    /// @brief Responsável por tratar as entradas e atualizar estado interno do sistema.
+    /// @brief Responsável por tratar as entradas e atualizar estado interno do
+    /// sistema.
     public void atualizar() {
 
         if (estadoAtual == Estados.INDEFINIDO) {
@@ -56,22 +68,36 @@ public class Main {
         if (estadoAtual == Estados.NO_MENU_DE_OPCOES) {
             /// @todo: Validar entrada e alterna estado.
 
-            if (/* cadastra usuário */false) {
+            if (opcaoDoUsuario == 1 /* cadastrar usuário */) {
+                
+                estadoAtual = Estados.CADASTRANDO_USUARIO;
 
-            } else if (/* cadastrar livro */false) {
+            } else if (opcaoDoUsuario == 2 /* cadastrar livro */) {
+                
+                estadoAtual = Estados.CADASTRANDO_LIVRO;
 
-            } else if (/* fazer emprestimo */false) {
-
-            } else if (/* devolver livro */false) {
-
-            } else if (/* imprimir relatorio */false) {
-
-            } else if (/* encerrando aplicação */false) {
-
+            } else if (opcaoDoUsuario == 3 /* fazer emprestimo */) {
+                
+                estadoAtual = Estados.FAZENDO_EMPRESTIMO;
+                
+            } else if (opcaoDoUsuario == 4 /* devolver livro */) {
+                
+                estadoAtual = Estados.DEVOLVENDO_LIVRO;
+                
+            } else if (opcaoDoUsuario == 5 /* imprimir relatorio */) {
+                
+                estadoAtual = Estados.IMPRIMINDO_RELATORIO;
+                
+            } else if (opcaoDoUsuario == 0 /* encerrando aplicação */) {
+                
+                estadoAtual = Estados.ENCERRANDO;
+                
             } else {
-                /* alguma outra coisa */
+                
+                estadoAtual = Estados.EM_ERRO;
+                
             }
-
+            
             return; // <-- Evita que a validação do estado das transições acima
                     // seja executada antes da renderização da interface.
         }
@@ -102,40 +128,56 @@ public class Main {
 
     }
 
-    /// @brief Responsável por desenhar e atualizar os elementos da interface gráfica.
+    /// @brief Responsável por desenhar e atualizar os elementos da interface
+    /// gráfica.
     public void renderizar() {
 
         if (estadoAtual == Estados.NO_MENU_DE_OPCOES) {
-            /// @todo: Exibir menu de opções.
+            System.out.println("Menu de Opções:");
+            System.out.println("1. Cadastrar Usuário");
+            System.out.println("2. Cadastrar Livro");
+            System.out.println("3. Fazer Empréstimo");
+            System.out.println("4. Devolver Livro");
+            System.out.println("5. Imprimir Relatório");
+            System.out.println("0. Encerrar");
+            System.out.print("->  ");
         }
 
         if (estadoAtual == Estados.EM_ERRO) {
-            /// @todo: Exibir mensagem de erro.
+            System.out.println("Ops! Algo deu errado. Tente novamente.");
+            System.out.println("Pressione ENTER para continuar...");
         }
-        
+
+        if (estadoAtual == Estados.SUCESSO) {
+            System.out.println("Operação realizada com sucesso!");
+            System.out.println("Pressione ENTER para continuar...");
+        }
+
         if (estadoAtual == Estados.CADASTRANDO_USUARIO) {
-            /// @todo: Exibir tela de cadastro de usuários.
+            System.out.println("Digite os dados do usuário a ser cadastrado (nome, matrícula, curso):");
+            System.out.print("->  ");
         }
-        
+
         if (estadoAtual == Estados.CADASTRANDO_LIVRO) {
-            /// @todo: Exibir tela de cadastro de livros.
+            System.out.println("Digite os dados do livro a ser cadastrado (título, autor, ano):");
+            System.out.print("->  ");
         }
-        
+
         if (estadoAtual == Estados.FAZENDO_EMPRESTIMO) {
             /// @todo: Exibir tela de empréstimo.
         }
-        
+
         if (estadoAtual == Estados.DEVOLVENDO_LIVRO) {
             /// @todo: Exibir tela de devolução de livro.
         }
-        
+
         if (estadoAtual == Estados.IMPRIMINDO_RELATORIO) {
             /// @todo: Exibir tela de relatório.
         }
 
     }
 
-    //=== Loop principal.
+    // === Loop principal.
     public void executar() {
 
         while (estadoAtual != Estados.ENCERRANDO) {
@@ -148,7 +190,7 @@ public class Main {
 
     }
 
-    //=== Método main.
+    // === Método main.
     public static void main(String[] args) {
 
         Main app = new Main();
