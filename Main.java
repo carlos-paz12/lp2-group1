@@ -1,5 +1,6 @@
 package br.universidade.biblio;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /// @brief Define os diferentes estados possíveis da aplicação.
@@ -19,14 +20,14 @@ enum Estados {
 /// @brief Motor da aplicação.
 public class Main {
 
-    // === Atributos.
+    //=== Atributos.
     // private Biblioteca biblioteca; //!< Principal interface com o sistema.
     private Estados estadoAtual;    //!< Estado atual da máquina.
     private Scanner scanner;        //!< Mecanismo de leitura de estrada.
     private int opcaoDoUsuario;     //!< Opção escolhida no menu de opções.
     private String entrada;         //!< Linha de entrada do usuário contendo informações da funcionalidade escolhida.
 
-    // === Construtor.
+    //=== Construtor.
     public Main() {
 
         // this.biblioteca = new Biblioteca();
@@ -37,7 +38,7 @@ public class Main {
 
     }
 
-    // === Métodos core.
+    //=== Métodos core.
     /// @brief Responsável por receber as entradas do usuário.
     public void processar() {
 
@@ -49,14 +50,13 @@ public class Main {
             scanner.nextLine();
         }
 
-        if (estadoAtual != Estados.NO_MENU_DE_OPCOES && estadoAtual != Estados.SUCESSO
-                && estadoAtual != Estados.EM_ERRO) {
+        if (estadoAtual != Estados.NO_MENU_DE_OPCOES && estadoAtual != Estados.SUCESSO && estadoAtual != Estados.EM_ERRO) {
             entrada = scanner.nextLine();
         }
+
     }
 
-    /// @brief Responsável por tratar as entradas e atualizar estado interno do
-    /// sistema.
+    /// @brief Responsável por tratar as entradas e atualizar estado interno do sistema.
     public void atualizar() {
 
         if (estadoAtual == Estados.INDEFINIDO) {
@@ -128,8 +128,7 @@ public class Main {
 
     }
 
-    /// @brief Responsável por desenhar e atualizar os elementos da interface
-    /// gráfica.
+    /// @brief Responsável por desenhar e atualizar os elementos da interface gráfica.
     public void renderizar() {
 
         if (estadoAtual == Estados.NO_MENU_DE_OPCOES) {
@@ -177,7 +176,7 @@ public class Main {
 
     }
 
-    // === Loop principal.
+    //=== Loop principal.
     public void executar() {
 
         while (estadoAtual != Estados.ENCERRANDO) {
@@ -190,9 +189,11 @@ public class Main {
 
     }
 
-    // === Método main.
-    public static void main(String[] args) {
+    //=== Método main.
+    public static void main(String[] args) throws IOException {
 
+        String caminho = "banco.json";
+        GerenciadorDeDados gd = new GerenciadorDeDados(caminho);
         Main app = new Main();
         app.executar();
 
